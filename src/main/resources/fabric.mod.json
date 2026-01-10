@@ -3,15 +3,13 @@
 	"id": "name-tag-blocker",
 	"version": "${version}",
 	"name": "Name Tag Blocker",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
+	"description": "Blocks certain names from being given by Name Tags.",
+	"authors": [ "SvenWollinger" ],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://wollinger.io",
+		"sources": "https://github.com/SvenWollinger/name-tag-blocker"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/name-tag-blocker/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -22,9 +20,7 @@
 			}
 		]
 	},
-	"mixins": [
-		"name-tag-blocker.mixins.json"
-	],
+	"mixins": [],
 	"depends": {
 		"fabricloader": ">=0.18.4",
 		"minecraft": "~1.21.1",
