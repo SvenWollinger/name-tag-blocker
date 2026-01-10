@@ -41,6 +41,12 @@ object BlockedDatabase {
         save()
     }
 
+    fun isBlocked(name: String): Boolean {
+        return config.global.any {
+            it.equals(name, ignoreCase = config.ignoreCase)
+        }
+    }
+
     fun getAll() = config.global.toList()
 
     fun save() {
