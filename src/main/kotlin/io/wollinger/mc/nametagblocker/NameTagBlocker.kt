@@ -6,12 +6,15 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object NameTagBlocker : ModInitializer {
-    private val logger = LoggerFactory.getLogger("name-tag-blocker")
+    val logger: Logger = LoggerFactory.getLogger("name-tag-blocker")
 
 	override fun onInitialize() {
+		BlockedDatabase //Referencing to init
+
 		CommandRegistrationCallback.EVENT.register { dispatcher, context, selection ->
 			dispatcher.register(literal("nametagblocker").then(
 				literal("list").executes { ctx ->
