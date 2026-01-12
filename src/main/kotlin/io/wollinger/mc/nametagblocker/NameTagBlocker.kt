@@ -17,6 +17,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object NameTagBlocker : ModInitializer {
+	private const val OP_PERMISSION: Int = 2
     val logger: Logger = LoggerFactory.getLogger("name-tag-blocker")
 
 	override fun onInitialize() {
@@ -35,26 +36,24 @@ object NameTagBlocker : ModInitializer {
 		}
 
 		CommandRegistrationCallback.EVENT.register { dispatcher, context, selection ->
-			dispatcher.register(literal("nametagblocker").then(
-				literal("list").executes { ctx ->
+			dispatcher.register(literal("nametagblocker")
+				.requires { source -> source.hasPermission(OP_PERMISSION) }
+				.then(literal("list").executes { ctx ->
 					val all = BlockedDatabase.getAll().joinToString(separator = ", ")
 					ctx.source.sendSuccess({Component.literal("All: $all")}, false)
 					1
-				}
-			)
+				})
+				.then(literal("add")
+					.then(argument("name", StringArgumentType.word()).executes { ctx ->
+						val name = StringArgumentType.getString(ctx, "name")
+						BlockedDatabase.add(name)
+						ctx.source.sendSuccess({ Component.literal("Added!") }, false)
+						1
+					}
+				))
 				.then(
-					literal("add").then(
-						argument("name", StringArgumentType.word()).executes { ctx ->
-							val name = StringArgumentType.getString(ctx, "name")
-							BlockedDatabase.add(name)
-							ctx.source.sendSuccess({Component.literal("Added!")}, false)
-							1
-						}
-					)
-				)
-				.then(
-					literal("remove").then(
-						argument("name", StringArgumentType.word())
+					literal("remove")
+						.then(argument("name", StringArgumentType.word())
 							.suggests { context, builder ->
 								val all = BlockedDatabase.getAll().filter { name ->
 									val typed = builder.remaining
